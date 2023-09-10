@@ -56,14 +56,16 @@ if [[ $origin_url = *github.com*$GH_USERNAME/* ]]; then
           sed s/^/repo:/ |
           paste -sd + -
       )
-      # https://docs.github.com/en/rest/search/search?apiVersion=2022-11-28#search-repositories
-      upstream_url=$(
-        "${curl_with_options[@]}" "$base_url/search/repositories?per_page=100&q=$repo_search_qualifiers" |
-          jq -r '.items |
+      if [ "$repo_search_qualifiers" != "" ]; then
+        # https://docs.github.com/en/rest/search/search?apiVersion=2022-11-28#search-repositories
+        upstream_url=$(
+          "${curl_with_options[@]}" "$base_url/search/repositories?per_page=100&q=$repo_search_qualifiers" |
+            jq -r '.items |
           sort_by(.stargazers_count, .watchers_count, .forks_count, .open_issues_count) |
           reverse |
           .[0].clone_url'
-      )
+        )
+      fi
     fi
   fi
 
