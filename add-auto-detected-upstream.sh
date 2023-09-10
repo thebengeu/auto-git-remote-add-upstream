@@ -70,7 +70,7 @@ if [[ $origin_url = *github.com*$GH_USERNAME/* ]]; then
   fi
 
   if [ "$upstream_url" != null ]; then
-    set -x
+    echo "Executing: git remote add upstream $upstream_url"
     git remote add upstream "$upstream_url"
   fi
 fi
