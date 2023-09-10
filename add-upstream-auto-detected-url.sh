@@ -80,15 +80,21 @@ if [ "$upstream_url" = null ]; then
                 or .forks_count > $earliest.forks_count
                 or .open_issues_count > $earliest.open_issues_count
                 or .watchers_count > $earliest.watchers_count) |
-              "\(.html_url) was created at \(.created_at) and has " +
+              "\(.full_name) was created at \(.created_at) and has " +
                 "\(.stargazers_count) stars, " +
                 "\(.forks_count) forks, " +
                 "\(.open_issues_count) open issues and " +
                 "\(.watchers_count) watchers"'
     )
     earliest_candidate_metrics=$(echo "$candidate_metrics" | head -1)
+    earliest_repo_name=$(echo "$earliest_candidate_metrics" | cut -d ' ' -f 1)
+
+    if [ "$earliest_repo_name" = "$repo_name" ]; then
+      exit 0
+    fi
+
     later_candidate_metrics=$(echo "$candidate_metrics" | tail -n +2)
-    upstream_url=$(echo "$earliest_candidate_metrics" | cut -d ' ' -f 1).git
+    upstream_url=https://github.com/$earliest_repo_name.git
 
     echo "Earliest created repo $earliest_candidate_metrics"
     echo
@@ -102,8 +108,6 @@ if [ "$upstream_url" = null ]; then
 fi
 
 if [ "$upstream_url" != null ]; then
-  echo "Executing: git remote add upstream $upstream_url"
   git remote add upstream "$upstream_url"
-else
-  echo "Upstream repo URL could not be auto-detected. If this script is being run from .git/hooks/post-checkout, remove its corresponding command from there or manually add the upstream remote to avoid running auto-detection after every checkout."
+  echo "Ran 'git remote add upstream $upstream_url'"
 fi
