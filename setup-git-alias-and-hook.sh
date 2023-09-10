@@ -13,7 +13,7 @@ alias=${1:-rau}
 
 git config --global alias."$alias" "!$(
   echo "$script" |
-    # Strip shebang
+    # Strip shebang line
     tail -n +2 |
     # Strip leading spaces, commented lines and blank lines
     sed -e 's/^ *//' -e '/^\(#.*\)\{0,1\}$/d' |
