@@ -26,6 +26,7 @@ template_dir=$(git config --global init.templateDir)
 if [ "$template_dir" = "" ]; then
   XDG_CONFIG_HOME=${XDG_CONFIG_HOME:-$HOME/.config}
   template_dir="$XDG_CONFIG_HOME/git/template"
+  git config --global init.templateDir "$template_dir"
 fi
 
 command="git $alias"
