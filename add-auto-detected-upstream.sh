@@ -69,7 +69,7 @@ if [[ $origin_url = *github.com*$GH_USERNAME/* ]]; then
                 or .open_issues_count > $earliest.open_issues_count
                 or .stargazers_count > $earliest.stargazers_count
                 or .watchers_count > $earliest.watchers_count) |
-              "\(.html_url) has \(.stargazers_count) stars, \(.forks_count) forks, " +
+              "\(.html_url) was created at \(.created_at) and has \(.stargazers_count) stars, \(.forks_count) forks, " +
                 "\(.open_issues_count) open issues and \(.watchers_count) watchers"'
         )
         earliest_candidate_metrics=$(echo "$candidate_metrics" | head -1)
