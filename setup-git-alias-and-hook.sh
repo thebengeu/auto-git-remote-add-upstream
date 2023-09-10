@@ -1,6 +1,6 @@
 #!/usr/bin/env sh
 alias=${1:-rau}
-script_name=add-auto-detected-upstream.sh
+script_name=add-upstream-auto-detected-url.sh
 local_script=$(dirname "$0")/$script_name
 set_alias_message="Setting '$alias' Git alias for one-liner transformation of"
 
