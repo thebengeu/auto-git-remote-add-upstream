@@ -54,7 +54,7 @@ if [[ $origin_url = *github.com*$GH_USERNAME/* ]]; then
           # repo:owner/name+repo:owner/name+...
           jq -r .items[].repository.full_name |
           sed s/^/repo:/ |
-          paste -sd +
+          paste -sd + -
       )
       # https://docs.github.com/en/rest/search/search?apiVersion=2022-11-28#search-repositories
       upstream_url=$(

@@ -18,7 +18,7 @@ git config --global alias."$alias" "!$(
     # Strip leading spaces, commented lines and blank lines
     sed -e 's/^ *//' -e '/^\(#.*\)\{0,1\}$/d' |
     # Join lines with newline
-    paste -sd '\n'
+    paste -sd '\n' -
 ) #"
 
 template_dir=$(git config --global init.templateDir)
