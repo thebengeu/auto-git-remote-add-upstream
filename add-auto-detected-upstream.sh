@@ -58,13 +58,32 @@ if [[ $origin_url = *github.com*$GH_USERNAME/* ]]; then
       )
       if [ "$repo_search_qualifiers" != "" ]; then
         # https://docs.github.com/en/rest/search/search?apiVersion=2022-11-28#search-repositories
-        upstream_url=$(
+        candidate_metrics=$(
           "${curl_with_options[@]}" "$base_url/search/repositories?per_page=100&q=$repo_search_qualifiers" |
-            jq -r '.items |
-          sort_by(.stargazers_count, .watchers_count, .forks_count, .open_issues_count) |
-          reverse |
-          .[0].clone_url'
+            jq -r '(.items |
+              sort_by(.created_at)) as $sorted |
+              $sorted[0] as $earliest |
+              $sorted[] |
+              select(. == $earliest
+                or .forks_count > $earliest.forks_count
+                or .open_issues_count > $earliest.open_issues_count
+                or .stargazers_count > $earliest.stargazers_count
+                or .watchers_count > $earliest.watchers_count) |
+              "\(.html_url) has \(.stargazers_count) stars, \(.forks_count) forks, " +
+                "\(.open_issues_count) open issues and \(.watchers_count) watchers"'
         )
+        earliest_candidate_metrics=$(echo "$candidate_metrics" | head -1)
+        later_candidate_metrics=$(echo "$candidate_metrics" | tail -n +2)
+        upstream_url=$(echo "$earliest_candidate_metrics" | cut -d ' ' -f 1).git
+
+        echo "Earliest created repo $earliest_candidate_metrics"
+        echo
+
+        if [ "$later_candidate_metrics" != "" ]; then
+          echo "Repos created later with more stars, forks, open issues or watchers:"
+          echo "$later_candidate_metrics"
+          echo
+        fi
       fi
     fi
   fi
