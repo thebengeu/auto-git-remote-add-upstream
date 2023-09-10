@@ -24,6 +24,11 @@ if [ "$GH_USERNAME" = "" ]; then
     "${curl_with_options[@]}" "$base_url/search/users?q=$user_email%20in:email" |
       jq -r .items[0].login
   )
+
+  if [ "$GH_USERNAME" = null ]; then
+    echo "GitHub username could not be auto-detected from $user_email, set the GH_USERNAME environment variable instead"
+    exit 1
+  fi
 fi
 
 origin_url=$(git ls-remote --get-url origin)
