@@ -1,15 +1,17 @@
 #!/usr/bin/env sh
+alias=${1:-rau}
 script_name=add-auto-detected-upstream.sh
 local_script=$(dirname "$0")/$script_name
-remote_script="https://raw.githubusercontent.com/thebengeu/auto-git-remote-add-upstream/master/$script_name"
+adding_alias_message="Adding '$alias' Git alias for one-liner transformation of"
 
 if [ -f "$local_script" ]; then
   script=$(cat "$local_script")
+  echo "$adding_alias_message $local_script"
 else
+  remote_script="https://raw.githubusercontent.com/thebengeu/auto-git-remote-add-upstream/master/$script_name"
   script=$(curl -s "$remote_script")
+  echo "$adding_alias_message $remote_script"
 fi
-
-alias=${1:-rau}
 
 git config --global alias."$alias" "!$(
   echo "$script" |
