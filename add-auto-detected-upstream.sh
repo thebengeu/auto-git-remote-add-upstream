@@ -43,7 +43,7 @@ if [[ $origin_url = *github.com*$GH_USERNAME/* ]]; then
   if [ "$upstream_url" = null ]; then
     not_you="^(?!$(git config user.name) <$user_email>$)"
     latest_hash_not_yours=$(
-      git log --author="$not_you" --format=%H --perl-regexp --reverse |
+      git log --author="$not_you" --format=%H --perl-regexp |
         head -1
     )
 
