@@ -4,7 +4,7 @@ if [ $# -gt 0 ]; then
   exit $?
 fi
 
-if git remote -v | grep '^upstream\t'; then
+if git remote -v | grep -q '^upstream\s'; then
   exit 0
 fi
 
