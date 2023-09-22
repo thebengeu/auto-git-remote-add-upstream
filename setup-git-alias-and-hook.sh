@@ -38,7 +38,7 @@ if [ ! -f "$post_checkout_path" ]; then
 fi
 
 grep -q "$script_name" "$post_checkout_path" ||
-  echo ".git/hooks/$script_name && sed -i'' /$script_name/d .git/hooks/post-checkout" >>"$post_checkout_path"
+  echo "\"\$GIT_DIR/hooks/$script_name\" && sed -i'' /$script_name/d \"\$GIT_DIR/hooks/post-checkout\"" >>"$post_checkout_path"
 
 echo "$post_checkout_path now contains:"
 cat "$post_checkout_path"
