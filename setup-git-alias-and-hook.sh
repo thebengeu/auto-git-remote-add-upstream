@@ -11,37 +11,32 @@ if [ "$template_dir" = "" ]; then
 fi
 
 hooks_dir="$template_dir/hooks"
+script_src_dir=$(dirname "$0")
+
 script_name=add-upstream-auto-detected-url.sh
 script_dest_path="$hooks_dir/$script_name"
-local_script=$(dirname "$0")/$script_name
+script_src_path=$script_src_dir/$script_name
 
 mkdir -p "$hooks_dir"
-
-if [ -f "$local_script" ]; then
-  cp "$local_script" "$hooks_dir"
-  echo "Copied $local_script to $hooks_dir"
-else
-  remote_script="https://raw.githubusercontent.com/thebengeu/auto-git-remote-add-upstream/master/$script_name"
-  curl -s "$remote_script" >"$script_dest_path"
-  echo "Downloaded $remote_script to $script_dest_path"
-fi
-
-echo
-
+cp "$script_src_path" "$script_dest_path"
 chmod +x "$script_dest_path"
 
-post_checkout_path="$hooks_dir/post-checkout"
+echo "Copied $script_src_path to $hooks_dir"
+echo
 
-if [ ! -f "$post_checkout_path" ]; then
-  echo '#!/usr/bin/env sh' >"$post_checkout_path"
-  chmod +x "$post_checkout_path"
+post_checkout_src_path="$script_src_dir/post-checkout"
+post_checkout_dest_path="$hooks_dir/post-checkout"
+
+if [ ! -f "$post_checkout_dest_path" ]; then
+  cp "$post_checkout_src_path" "$post_checkout_dest_path"
+  chmod +x "$post_checkout_dest_path"
+elif ! grep -q "$script_name" "$post_checkout_dest_path"; then
+  tail -n +2 "$post_checkout_src_path" >>"$post_checkout_dest_path"
 fi
 
-grep -q "$script_name" "$post_checkout_path" ||
-  echo "\"\$GIT_DIR/hooks/$script_name\" && sed -i'' /$script_name/d \"\$GIT_DIR/hooks/post-checkout\"" >>"$post_checkout_path"
-
-echo "$post_checkout_path now contains:"
-cat "$post_checkout_path"
+echo "$post_checkout_dest_path now contains:"
+echo
+cat "$post_checkout_dest_path"
 echo
 
 git config --global alias."$alias" "!$script_dest_path"

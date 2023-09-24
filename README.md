@@ -9,7 +9,8 @@ Git alias and hook to automatically add `upstream` remote using auto-detected UR
 ## Setup `rau` Git Alias and Hook
 
 ```console
-curl -s https://raw.githubusercontent.com/thebengeu/auto-git-remote-add-upstream/master/setup-git-alias-and-hook.sh | sh
+git clone https://github.com/thebengeu/auto-git-remote-add-upstream.git
+sh auto-git-remote-add-upstream/setup-git-alias-and-hook.sh
 ```
 
 ## `rau` Git Alias
