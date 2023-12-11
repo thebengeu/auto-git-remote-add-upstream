@@ -1,4 +1,2 @@
 #!/usr/bin/env sh
-if test "$GIT_DIR" != ""; then
-  "$GIT_DIR/hooks/add-upstream-auto-detected-url.sh" && sed -i='' /add-upstream-auto-detected-url.sh/d "$GIT_DIR/hooks/post-checkout"
-fi
+test "$GIT_DIR" != "" && "$GIT_DIR/hooks/add-upstream-auto-detected-url.sh" && sed -i='' /add-upstream-auto-detected-url.sh/d "$GIT_DIR/hooks/post-checkout"
